@@ -9,7 +9,7 @@ def init_sharepoint_loader():
   loader = SharePointLoader(
     document_library_id=os.getenv("DOCUMENT_LIBRARY_ID"), 
     auth_with_token=True,
-    folder_path=os.getenv("FOLDER_PATH")
+    folder_id=os.getenv("FOLDER_ID")
   )
   return loader
 

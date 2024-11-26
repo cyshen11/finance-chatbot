@@ -3,3 +3,4 @@ langchain==0.3.8
 openai==1.55.0
 python-dotenv==1.0.1
 langchain-community==0.3.8
+o365==2.0.38

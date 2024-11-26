@@ -13,7 +13,15 @@ def init_sharepoint_loader():
   )
   return loader
 
+def extract_pdf_text(docs):
+  extracted_text = {}
+  for d in docs:
+    extracted_text[d.metadata['source'] + '|' + str(d.metadata['page'])] = d.page_content
+
+  return extracted_text
+
 if __name__ == "__main__":
   sharepoint_loader = init_sharepoint_loader()
   docs = sharepoint_loader.load()
-  print(docs)
+  extracted_text = extract_pdf_text(docs)
+  print(extracted_text)

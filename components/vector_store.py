@@ -3,6 +3,7 @@ import os
 from pymongo import MongoClient
 from pymongo.operations import SearchIndexModel
 import time
+from components.embedder import get_embedding
 
 # Load environment variables from the .env file
 load_dotenv()
@@ -52,6 +53,37 @@ def create_vector_index(collection):
 def store_embeddings(docs_to_insert):
   collection = insert_docs_to_mongodb(docs_to_insert)
   create_vector_index(collection)
+
+def retrieve(query):
+  """Gets results from a vector search query."""
+
+  # Connect to your Atlas cluster
+  client = MongoClient(os.getenv("MONGODB_CONNECTION_STRING"))
+  collection = client[os.getenv("MONGODB_DB_NAME")][os.getenv("MONGODB_DB_COLLECTION")]
+
+  query_embedding = get_embedding(query)
+  pipeline = [
+      {
+            "$vectorSearch": {
+              "index": "vector_index",
+              "queryVector": query_embedding,
+              "path": "embedding",
+              "exact": True,
+              "limit": 5
+            }
+      }, {
+            "$project": {
+              "_id": 0,
+              "text": 1
+         }
+      }
+  ]
+  results = collection.aggregate(pipeline)
+  array_of_results = []
+  for doc in results:
+      array_of_results.append(doc)
+  return array_of_results
+
   
 
   

@@ -1,33 +1,23 @@
-from openai import OpenAI
 import streamlit as st
+from langchain_openai.chat_models import ChatOpenAI
 
-st.title("ChatGPT-like clone")
+st.title("Finance Chatbot")
 
-client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
+openai_api_key = st.sidebar.text_input("OpenAI API Key", type="password")
 
-if "openai_model" not in st.session_state:
-    st.session_state["openai_model"] = "gpt-3.5-turbo"
 
-if "messages" not in st.session_state:
-    st.session_state.messages = []
+def generate_response(input_text):
+    model = ChatOpenAI(temperature=0.7, api_key=openai_api_key)
+    st.info(model.invoke(input_text))
 
-for message in st.session_state.messages:
-    with st.chat_message(message["role"]):
-        st.markdown(message["content"])
 
-if prompt := st.chat_input("What is up?"):
-    st.session_state.messages.append({"role": "user", "content": prompt})
-    with st.chat_message("user"):
-        st.markdown(prompt)
-
-    with st.chat_message("assistant"):
-        stream = client.chat.completions.create(
-            model=st.session_state["openai_model"],
-            messages=[
-                {"role": m["role"], "content": m["content"]}
-                for m in st.session_state.messages
-            ],
-            stream=True,
-        )
-        response = st.write_stream(stream)
-    st.session_state.messages.append({"role": "assistant", "content": response})
+with st.form("my_form"):
+    text = st.text_area(
+        "Enter text:",
+        "What is the NVIDIA 2024 Q1 Revenue?",
+    )
+    submitted = st.form_submit_button("Submit")
+    if not openai_api_key.startswith("sk-"):
+        st.warning("Please enter your OpenAI API key!", icon="⚠")
+    if submitted and openai_api_key.startswith("sk-"):
+        generate_response(text)

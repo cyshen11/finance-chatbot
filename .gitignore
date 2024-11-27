@@ -161,3 +161,10 @@ cython_debug/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
 .streamlit/secrets.toml
+data/.DS_Store
+data/chroma_langchain_db/chroma.sqlite3
+data/chroma_langchain_db/d59a850f-9f93-42ec-b3bc-91eff96f8243/data_level0.bin
+data/chroma_langchain_db/d59a850f-9f93-42ec-b3bc-91eff96f8243/header.bin
+data/chroma_langchain_db/d59a850f-9f93-42ec-b3bc-91eff96f8243/length.bin
+data/chroma_langchain_db/d59a850f-9f93-42ec-b3bc-91eff96f8243/link_lists.bin
+.DS_Store

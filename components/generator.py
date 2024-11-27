@@ -22,10 +22,12 @@ def generate(state:State):
   if not state["context"]:
      return {"answer": "no context"}
 
-  docs_content = "\n\n".join(doc["text"] for doc in state["context"])
+  # docs_content = "\n\n".join(doc["text"] for doc in state["context"])
+  docs_content = "\n\n".join(doc.page_content for doc in state["context"])
+  docs_source = "\n\n".join('link:' + doc.metadata['source'] + ' page:' + str(doc.metadata['page']) for doc in state["context"])
   
   messages = prompt.invoke({"question": state["question"], "context": docs_content})
   
   response = llm.invoke(messages)
   
-  return {"answer": response.content}
+  return {"answer": response.content, "source": docs_source}

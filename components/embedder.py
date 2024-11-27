@@ -1,5 +1,6 @@
 from dotenv import load_dotenv
-from openai import OpenAI
+# from openai import OpenAI
+import openai
 import os
 
 # Load environment variables from the .env file
@@ -9,8 +10,10 @@ load_dotenv()
 def get_embedding(text):
    """Generates vector embeddings for the given text."""
    model = os.getenv("EMBEDDING_MODEL")
-   openai_client = OpenAI()
-   embedding = openai_client.embeddings.create(input = [text], model=model).data[0].embedding
+   # openai_client = OpenAI()
+   # embedding = openai_client.embeddings.create(input = [text], model=model).data[0].embedding
+   openai.api_key=os.getenv("OPENAI_API_KEY")
+   embedding = openai.embeddings.create(input=text, model=os.getenv("EMBEDDING_MODEL")).data[0].embedding
    return embedding
 
 def embed_documents(documents):

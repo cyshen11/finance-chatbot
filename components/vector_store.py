@@ -1,98 +1,34 @@
 from dotenv import load_dotenv
-import os
-from pymongo import MongoClient
-from pymongo.operations import SearchIndexModel
-import time
-from components.embedder import get_embedding
 from components.utils import State
+from langchain_community.vectorstores import Chroma
+from langchain_openai import OpenAIEmbeddings
+from uuid import uuid4
 
 # Load environment variables from the .env file
 load_dotenv()
 
-def insert_docs_to_mongodb(docs_to_insert):
-   # Connect to your Atlas cluster
-  client = MongoClient(os.getenv("MONGODB_CONNECTION_STRING"))
-  collection = client[os.getenv("MONGODB_DB_NAME")][os.getenv("MONGODB_DB_COLLECTION")]
-  # Insert documents into the collection
-  collection.insert_many(docs_to_insert)
+def initialize_vector_store():
+  embeddings = OpenAIEmbeddings(model="text-embedding-3-large")
 
-  return collection
-
-def create_vector_index(collection):
-
-  # Create your index model, then create the search index
-  index_name="vector_index"
-  search_index_model = SearchIndexModel(
-    definition = {
-      "fields": [
-        {
-          "type": "vector",
-          "numDimensions": 1536,
-          "path": "embedding",
-          "similarity": "cosine"
-        }
-      ]
-    },
-    name = index_name,
-    type = "vectorSearch"
+  vector_store = Chroma(
+    collection_name="docs_embeddings",
+    embedding_function=embeddings,
+    persist_directory="data/chroma_langchain_db",  
   )
-  collection.create_search_index(model=search_index_model)
+  
+  return vector_store
 
-  # Wait for initial sync to complete
-  print("Polling to check if the index is ready. This may take up to a minute.")
-  predicate=None
-  if predicate is None:
-    predicate = lambda index: index.get("queryable") is True
-  while True:
-    indices = list(collection.list_search_indexes(index_name))
-    if len(indices) and predicate(indices[0]):
-        break
-    time.sleep(5)
-  print(index_name + " is ready for querying.")
-
-
-def store_embeddings(docs_to_insert):
-  collection = insert_docs_to_mongodb(docs_to_insert)
-  create_vector_index(collection)
-
+def add_items(vector_store, documents):
+  uuids = [str(uuid4()) for _ in range(len(documents))]
+  vector_store.add_documents(documents=documents, ids=uuids)
 
 def retrieve(state: State):
-  """Gets results from a vector search query."""
 
-  # Connect to your Atlas cluster
-  client = MongoClient(os.getenv("MONGODB_CONNECTION_STRING"))
-  collection = client[os.getenv("MONGODB_DB_NAME")][os.getenv("MONGODB_DB_COLLECTION")]
+  vectorstore = initialize_vector_store()
   
-  query_embedding = get_embedding(state["question"])
-  print(query_embedding)
-  pipeline = [
-      {
-            "$vectorSearch": {
-              "index": "vector_index",
-              "queryVector": query_embedding,
-              "path": "embedding",
-              "exact": True,
-              "limit": 5
-            }
-      }, {
-            "$project": {
-              "_id": 0,
-              "text": 1,
-              # "source": 2,
-              # "page": 3
-         }
-      }
-  ]
-  results = collection.aggregate(pipeline)
-  print(results)
-  
-  array_of_results = []
-  source = ""
-  for doc in results:
-      array_of_results.append(doc)
-      source.append(doc["source"] + " page " + doc["page"] + "\n")
+  retriever = vectorstore.as_retriever()
 
-  return {"context": array_of_results, "source": source}
+  return {"context": retriever.invoke(state["question"])}
 
   
 

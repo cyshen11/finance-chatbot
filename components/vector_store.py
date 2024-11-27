@@ -1,8 +1,10 @@
 from dotenv import load_dotenv
 from components.utils import State
+from components.document_loader import load_documents
 from langchain_community.vectorstores import Chroma
 from langchain_openai import OpenAIEmbeddings
 from uuid import uuid4
+import streamlit as st
 
 # Load environment variables from the .env file
 load_dotenv()
@@ -29,6 +31,13 @@ def retrieve(state: State):
   retriever = vectorstore.as_retriever()
 
   return {"context": retriever.invoke(state["question"])}
+
+def create_vector_store():
+  documents = load_documents(st.secrets["DOCUMENT_LIBRARY_ID"], st.secrets["FOLDER_ID"])
+  vector_store = initialize_vector_store()
+  add_items(vector_store, documents)
+
+  return True
 
   
 

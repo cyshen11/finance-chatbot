@@ -1,8 +1,8 @@
 from components.document_loader import load_documents
-from components.embedder import embed_documents
 from components.vector_store import initialize_vector_store, add_items
 import os
 from dotenv import load_dotenv
+import streamlit as st
 
 # Load environment variables from the .env file
 load_dotenv()

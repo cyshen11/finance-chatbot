@@ -55,14 +55,16 @@ def store_embeddings(docs_to_insert):
   collection = insert_docs_to_mongodb(docs_to_insert)
   create_vector_index(collection)
 
+
 def retrieve(state: State):
   """Gets results from a vector search query."""
 
   # Connect to your Atlas cluster
   client = MongoClient(os.getenv("MONGODB_CONNECTION_STRING"))
   collection = client[os.getenv("MONGODB_DB_NAME")][os.getenv("MONGODB_DB_COLLECTION")]
-
+  
   query_embedding = get_embedding(state["question"])
+  print(query_embedding)
   pipeline = [
       {
             "$vectorSearch": {
@@ -75,16 +77,22 @@ def retrieve(state: State):
       }, {
             "$project": {
               "_id": 0,
-              "text": 1
+              "text": 1,
+              # "source": 2,
+              # "page": 3
          }
       }
   ]
   results = collection.aggregate(pipeline)
+  print(results)
+  
   array_of_results = []
+  source = ""
   for doc in results:
       array_of_results.append(doc)
-  
-  return {"context": array_of_results}
+      source.append(doc["source"] + " page " + doc["page"] + "\n")
+
+  return {"context": array_of_results, "source": source}
 
   
 

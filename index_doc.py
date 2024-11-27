@@ -1,6 +1,6 @@
-from document_loader import load_documents
-from embedder import embed_documents
-from vector_store import store_embeddings
+from components.document_loader import load_documents
+from components.embedder import embed_documents
+from components.vector_store import store_embeddings
 import os
 from dotenv import load_dotenv
 

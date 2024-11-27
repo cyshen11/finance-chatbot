@@ -17,4 +17,7 @@ with st.form("my_form"):
     # if submitted and openai_api_key.startswith("sk-"):
     if submitted:
         response = graph.invoke({"question": question})
+        st.text("Answer")
         st.info(response["answer"])
+        st.text("Source")
+        st.info(response["source"])

@@ -19,6 +19,9 @@ def generate(state:State):
   # Define prompt for question-answering
   prompt = hub.pull("rlm/rag-prompt")
   
+  if not state["context"]:
+     return {"answer": "no context"}
+
   docs_content = "\n\n".join(doc["text"] for doc in state["context"])
   
   messages = prompt.invoke({"question": state["question"], "context": docs_content})

@@ -48,10 +48,14 @@ if st.session_state.current_page == "Home":
 
 elif st.session_state.current_page == "Settings":
     st.title("Settings Page")
-    if st.button("Create database"):
-        # try:
-        create_vector_store()
-        #     st.success("✅ Database created successfully!")
-        # except:
-        #     st.error("❌ Database creation failed.")
+    create_db = st.button("Create database")
+    if not openai_api_key.startswith("sk-"):
+        st.warning("Please enter your OpenAI API key!", icon="⚠")
+
+    if create_db:
+        try:
+            create_vector_store()
+            st.success("✅ Database created successfully!")
+        except:
+            st.error("❌ Database creation failed.")
 

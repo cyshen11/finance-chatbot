@@ -10,22 +10,25 @@ O365_TOKEN=json.loads(st.secrets["O365_TOKEN"])
 
 def init_sharepoint_loader(document_library_id, folder_id):
 
-  # Initialize O365 Account with the token
-  credentials = (None, None)  # No client ID/secret needed for token-based auth
-  account = Account(credentials, token_backend=None)
-  account.connection.token = O365_TOKEN
+  # # Initialize O365 Account with the token
+  # credentials = (None, None)  # No client ID/secret needed for token-based auth
+  # account = Account(credentials, token_backend=None)
+  # account.connection.token = O365_TOKEN
 
-  # Refresh the token if needed (optional)
-  if not account.is_authenticated:
-      account.connection.refresh_token()
+  # # Refresh the token if needed (optional)
+  # if not account.is_authenticated:
+  #     account.connection.refresh_token()
 
-  # Check if authentication was successful
-  if not account.is_authenticated:
-      raise ValueError("Failed to authenticate with the provided O365 token")
+  # # Check if authentication was successful
+  # if not account.is_authenticated:
+  #     raise ValueError("Failed to authenticate with the provided O365 token")
+  with open('o365_token.json', 'w') as f:
+    json.dump(O365_TOKEN, f)
 
   loader = SharePointLoader(
     document_library_id=document_library_id, 
-    account=account,
+    auth_with_token=True,
+    token_path="o365_token.json"
     folder_id=folder_id
   )
 

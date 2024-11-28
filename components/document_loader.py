@@ -23,7 +23,7 @@ def init_sharepoint_loader(document_library_id, folder_id):
   # # Check if authentication was successful
   # if not account.is_authenticated:
   #     raise ValueError("Failed to authenticate with the provided O365 token")
-  with open('o365_token.json', 'w') as f:
+  with open('/home/appuser/credentials/o365_token.txt', 'w') as f:
     json.dump(O365_TOKEN, f)
 
   loader = SharePointLoader(

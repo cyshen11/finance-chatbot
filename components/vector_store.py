@@ -1,6 +1,6 @@
 from components.utils import State
 from components.document_loader import load_documents
-from langchain_community.vectorstores import Chroma
+from langchain_chroma import Chroma
 from langchain_openai import OpenAIEmbeddings
 from uuid import uuid4
 import streamlit as st

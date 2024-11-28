@@ -1,4 +1,3 @@
-from dotenv import load_dotenv
 from components.utils import State
 from components.document_loader import load_documents
 from langchain_community.vectorstores import Chroma

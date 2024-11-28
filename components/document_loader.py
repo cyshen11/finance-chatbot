@@ -4,6 +4,7 @@ import streamlit as st
 import json
 from O365 import Account
 from pathlib import Path
+import os
 
 O365_CLIENT_ID=st.secrets["O365_CLIENT_ID"]
 O365_CLIENT_SECRET=st.secrets["O365_CLIENT_SECRET"]
@@ -24,7 +25,11 @@ def init_sharepoint_loader(document_library_id, folder_id):
   # # Check if authentication was successful
   # if not account.is_authenticated:
   #     raise ValueError("Failed to authenticate with the provided O365 token")
-  with open(Path.home() / ".credentials" / "o365_token.txt", 'w') as f:
+  directory_path = Path.home() / ".credentials"
+  if not os.path.exists(directory_path):
+    os.makedirs(directory_path)
+
+  with open(directory_path / "o365_token.txt", 'w') as f:
     json.dump(O365_TOKEN, f)
 
   loader = SharePointLoader(

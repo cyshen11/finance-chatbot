@@ -169,3 +169,4 @@ data/chroma_langchain_db/d59a850f-9f93-42ec-b3bc-91eff96f8243/length.bin
 data/chroma_langchain_db/d59a850f-9f93-42ec-b3bc-91eff96f8243/link_lists.bin
 .DS_Store
 components/auth.ipynb
+convert_json_to_toml

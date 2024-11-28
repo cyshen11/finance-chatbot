@@ -30,10 +30,9 @@ if st.session_state.current_page == "Home":
             "What is the NVIDIA 2025 Q1 Revenue?",
         )
         submitted = st.form_submit_button("Submit")
-        # if not openai_api_key.startswith("sk-"):
-        #     st.warning("Please enter your OpenAI API key!", icon="⚠")
-        # if submitted and openai_api_key.startswith("sk-"):
-        if submitted:
+        if not openai_api_key.startswith("sk-"):
+            st.warning("Please enter your OpenAI API key!", icon="⚠")
+        if submitted and openai_api_key.startswith("sk-"):
             response = graph.invoke({"question": question})
             st.text("Answer")
             st.info(response["answer"])

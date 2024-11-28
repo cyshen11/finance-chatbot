@@ -5,6 +5,7 @@ from langchain_core.runnables import RunnablePassthrough
 from langchain_openai import ChatOpenAI
 from dotenv import load_dotenv
 from components.utils import State
+import pandas as pd
 
 # Load environment variables from the .env file
 load_dotenv()
@@ -22,10 +23,14 @@ def generate(state:State):
   if not state["context"]:
      return {"answer": "no context"}
 
-  # docs_content = "\n\n".join(doc["text"] for doc in state["context"])
   docs_content = "\n\n".join(doc.page_content for doc in state["context"])
-  docs_source = "\n\n".join('link:' + doc.metadata['source'] + ' page:' + str(doc.metadata['page']) for doc in state["context"])
-  
+  docs_source = "\n\n".join( 'page:' + str(doc.metadata['page']) + '\nsource:' + doc.metadata['source'] for doc in state["context"])
+  # docs_source = pd.DataFrame({
+  #    'Page': [doc.metadata['page'] for doc in state["context"]],
+  #    'Source': [doc.metadata['source'] for doc in state["context"]]
+  # })
+  # docs_source.set_index("Page")
+
   messages = prompt.invoke({"question": state["question"], "context": docs_content})
   
   response = llm.invoke(messages)

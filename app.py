@@ -49,9 +49,9 @@ if st.session_state.current_page == "Home":
 elif st.session_state.current_page == "Settings":
     st.title("Settings Page")
     if st.button("Create database"):
-        try:
-            create_vector_store()
-            st.success("✅ Database created successfully!")
-        except:
-            st.error("❌ Database creation failed.")
+        # try:
+        create_vector_store()
+        #     st.success("✅ Database created successfully!")
+        # except:
+        #     st.error("❌ Database creation failed.")
 

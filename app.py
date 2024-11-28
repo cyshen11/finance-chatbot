@@ -2,6 +2,7 @@ __import__('pysqlite3')
 import sys
 sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
 
+import os
 import streamlit as st
 from components.graph import build_graph
 from components.vector_store import create_vector_store
@@ -14,6 +15,8 @@ def navigate(page):
     st.session_state.current_page = page
 
 openai_api_key = st.sidebar.text_input("OpenAI API Key", type="password")
+os.environ["OPENAI_API_KEY"] = openai_api_key
+
 settings = st.sidebar.button("⚙️ Settings")
 home = st.sidebar.button("🏠 Home")
 

@@ -6,9 +6,6 @@ from langchain_openai import OpenAIEmbeddings
 from uuid import uuid4
 import streamlit as st
 
-# Load environment variables from the .env file
-load_dotenv()
-
 def initialize_vector_store():
   embeddings = OpenAIEmbeddings(model="text-embedding-3-large")
 

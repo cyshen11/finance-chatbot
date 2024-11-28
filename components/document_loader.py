@@ -16,7 +16,7 @@ def init_sharepoint_loader(document_library_id, folder_id):
   # except:
   loader = SharePointLoader(
     document_library_id=document_library_id, 
-    auth_with_token=False,
+    load_auth=True,
     folder_id=folder_id
   )
 

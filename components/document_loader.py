@@ -7,18 +7,18 @@ O365_CLIENT_SECRET=st.secrets["O365_CLIENT_SECRET"]
 
 def init_sharepoint_loader(document_library_id, folder_id):
 
-  try:
-    loader = SharePointLoader(
-      document_library_id=document_library_id, 
-      auth_with_token=True,
-      folder_id=folder_id
-    )
-  except:
-    loader = SharePointLoader(
-      document_library_id=document_library_id, 
-      auth_with_token=False,
-      folder_id=folder_id
-    )
+  # try:
+  #   loader = SharePointLoader(
+  #     document_library_id=document_library_id, 
+  #     auth_with_token=True,
+  #     folder_id=folder_id
+  #   )
+  # except:
+  loader = SharePointLoader(
+    document_library_id=document_library_id, 
+    auth_with_token=False,
+    folder_id=folder_id
+  )
 
   return loader
 

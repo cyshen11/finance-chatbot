@@ -1,14 +1,7 @@
 
 from langchain import hub
-from langchain_core.output_parsers import StrOutputParser
-from langchain_core.runnables import RunnablePassthrough
 from langchain_openai import ChatOpenAI
-from dotenv import load_dotenv
 from components.utils import State
-import pandas as pd
-
-# Load environment variables from the .env file
-load_dotenv()
 
 # Post-processing
 def format_docs(docs):

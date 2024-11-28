@@ -6,7 +6,7 @@ from O365 import Account
 
 O365_CLIENT_ID=st.secrets["O365_CLIENT_ID"]
 O365_CLIENT_SECRET=st.secrets["O365_CLIENT_SECRET"]
-O365_TOKEN=json.loads(st.secrets["O365_TOKEN"])
+O365_TOKEN=json.loads(json.dumps(st.secrets["O365_TOKEN"], indent=4))
 
 def init_sharepoint_loader(document_library_id, folder_id):
 

@@ -25,11 +25,6 @@ def generate(state:State):
 
   docs_content = "\n\n".join(doc.page_content for doc in state["context"])
   docs_source = "\n\n".join( 'page:' + str(doc.metadata['page']) + '\nsource:' + doc.metadata['source'] for doc in state["context"])
-  # docs_source = pd.DataFrame({
-  #    'Page': [doc.metadata['page'] for doc in state["context"]],
-  #    'Source': [doc.metadata['source'] for doc in state["context"]]
-  # })
-  # docs_source.set_index("Page")
 
   messages = prompt.invoke({"question": state["question"], "context": docs_content})
   

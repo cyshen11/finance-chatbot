@@ -28,7 +28,7 @@ def init_sharepoint_loader(document_library_id, folder_id):
   loader = SharePointLoader(
     document_library_id=document_library_id, 
     auth_with_token=True,
-    token_path="o365_token.json"
+    token_path="o365_token.json",
     folder_id=folder_id
   )
 

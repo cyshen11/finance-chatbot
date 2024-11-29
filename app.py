@@ -28,7 +28,7 @@ if home:
 
 # Display the appropriate page based on session state
 if st.session_state.current_page == "Home":
-    st.title("Finance Chatbot")
+    st.title("🤖 Sharepoint Chatbot/RAG")
     graph = build_graph()
 
     with st.form("my_form"):

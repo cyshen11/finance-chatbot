@@ -24,7 +24,7 @@ with st.form("my_form"):
   if submitted and openai_api_key.startswith("sk-"):
       response = graph.invoke({"question": question})
       st.markdown("### Answer")
-      st.markdown(response["answer"])
+      st.text(response["answer"])
     #   st.info(st.markdown(response["answer"]))
       st.markdown("### Source")
       st.markdown(response["source"])

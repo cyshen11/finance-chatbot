@@ -1,3 +1,5 @@
+"""About page"""
+
 import streamlit as st
 
 # Load the README.md content

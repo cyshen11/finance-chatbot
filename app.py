@@ -1,7 +1,8 @@
+"""Streamlit App"""
+
 __import__('pysqlite3')
 import sys
 sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
-
 import os
 import streamlit as st
 
@@ -9,6 +10,7 @@ import streamlit as st
 openai_api_key = st.sidebar.text_input("OpenAI API Key", type="password")
 os.environ["OPENAI_API_KEY"] = openai_api_key
 
+# Pages
 pg = st.navigation([
   st.Page("pages/home.py", title="Home"), 
   st.Page("pages/index_docs.py", title="Index Docs"), 

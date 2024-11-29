@@ -10,7 +10,7 @@ graph = build_graph()
 
 openai_api_key = os.environ["OPENAI_API_KEY"]
 
-url = "https://vincentcheng659.sharepoint.com/:f:/s/LLM/Epu633cK57BOuois5EdkmagB0XdbZaYMzGPCPZ-K3vRf1Q"
+url = st.secrets["SHAREPOINT_URL"]
 st.markdown(
    "Please ask questions based on the documents in this [Sharepoint folder](%s)" % url,
     unsafe_allow_html=False

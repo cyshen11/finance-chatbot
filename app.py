@@ -17,11 +17,11 @@ def navigate(page):
 openai_api_key = st.sidebar.text_input("OpenAI API Key", type="password")
 os.environ["OPENAI_API_KEY"] = openai_api_key
 
-settings = st.sidebar.button("⚙️ Settings")
+settings = st.sidebar.button("📄 Index Sharepoint Documents")
 home = st.sidebar.button("🏠 Home")
 
 if settings:
-    navigate("Settings")
+    navigate("Index Docs")
 
 if home:
     navigate("Home")
@@ -46,16 +46,16 @@ if st.session_state.current_page == "Home":
             st.text("Source")
             st.info(response["source"])
 
-elif st.session_state.current_page == "Settings":
-    st.title("Settings Page")
-    create_db = st.button("Create database")
+elif st.session_state.current_page == "Index Docs":
+    st.title("📄 Index Sharepoint Documents")
+    create_db = st.button("Index")
     if not openai_api_key.startswith("sk-"):
         st.warning("Please enter your OpenAI API key!", icon="⚠")
 
     if create_db:
         try:
             create_vector_store()
-            st.success("✅ Database created successfully!")
+            st.success("✅ Index documents successfully!")
         except:
-            st.error("❌ Database creation failed.")
+            st.error("❌ Index documents fail.")
 

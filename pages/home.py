@@ -23,7 +23,9 @@ with st.form("my_form"):
       st.warning("Please enter your OpenAI API key!", icon="⚠")
   if submitted and openai_api_key.startswith("sk-"):
       response = graph.invoke({"question": question})
-      st.text("Answer")
-      st.info(response["answer"])
-      st.text("Source")
-      st.info(response["source"])
+      st.markdown("### Answer")
+      st.markdown(response["answer"])
+    #   st.info(st.markdown(response["answer"]))
+      st.markdown("### Source")
+      st.markdown(response["source"])
+    #   st.info(response["source"])

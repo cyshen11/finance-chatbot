@@ -2,36 +2,36 @@ from langchain_community.document_loaders.sharepoint import SharePointLoader
 import warnings
 import streamlit as st
 import json
-from O365 import Account
 from pathlib import Path
 import os
 
+# Get parameters
 O365_CLIENT_ID=st.secrets["O365_CLIENT_ID"]
 O365_CLIENT_SECRET=st.secrets["O365_CLIENT_SECRET"]
-# O365_TOKEN=json.loads(json.dumps(st.secrets["O365_TOKEN"], indent=4))
 O365_TOKEN=dict(st.secrets["O365_TOKEN"])
 
 def init_sharepoint_loader(document_library_id, folder_id):
+  """Initialize SharePoint document loaders
 
-  # # Initialize O365 Account with the token
-  # credentials = (None, None)  # No client ID/secret needed for token-based auth
-  # account = Account(credentials, token_backend=None)
-  # account.connection.token = O365_TOKEN
+  Args:
+      document_library_id (str): SharePoint document library ID (default is None)
+      folder_id (str): SharePoint folder ID (default is None)
 
-  # # Refresh the token if needed (optional)
-  # if not account.is_authenticated:
-  #     account.connection.refresh_token()
+  Returns:
+      DocumentLoader: LangChain document loaders object
+  """
 
-  # # Check if authentication was successful
-  # if not account.is_authenticated:
-  #     raise ValueError("Failed to authenticate with the provided O365 token")
   directory_path = Path.home() / ".credentials"
+
+  # Check if dir exist
   if not os.path.exists(directory_path):
     os.makedirs(directory_path)
 
+  # Write O365 token into text file 
   with open(directory_path / "o365_token.txt", 'w') as f:
     json.dump(O365_TOKEN, f)
 
+  # Initialize document loader
   loader = SharePointLoader(
     document_library_id=document_library_id, 
     auth_with_token=True,
@@ -41,7 +41,20 @@ def init_sharepoint_loader(document_library_id, folder_id):
   return loader
 
 def load_documents(document_library_id, folder_id):
+  """Load docs from SharePoint
+
+  Args:
+      document_library_id (str): SharePoint document library ID (default is None)
+      folder_id (str): SharePoint folder ID (default is None)
+
+  Returns:
+      Array of LandChain Doc objects (arr)
+  """
+
+
   sharepoint_loader = init_sharepoint_loader(document_library_id, folder_id)
+
+  # supress warnings for empty PDF page
   with warnings.catch_warnings():
     warnings.simplefilter("ignore")
     documents = sharepoint_loader.load()

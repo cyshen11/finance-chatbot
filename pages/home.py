@@ -1,8 +1,11 @@
+"""Home page"""
+
 import os
 import streamlit as st
 from components.graph import build_graph
 
 st.title("🤖 Sharepoint Chatbot/RAG")
+
 graph = build_graph()
 
 openai_api_key = os.environ["OPENAI_API_KEY"]
@@ -21,11 +24,10 @@ with st.form("my_form"):
   submitted = st.form_submit_button("Submit")
   if not openai_api_key.startswith("sk-"):
       st.warning("Please enter your OpenAI API key!", icon="⚠")
+  
   if submitted and openai_api_key.startswith("sk-"):
       response = graph.invoke({"question": question})
       st.markdown("### Answer")
       st.text(response["answer"])
-    #   st.info(st.markdown(response["answer"]))
       st.markdown("### Source")
       st.markdown(response["source"])
-    #   st.info(response["source"])

@@ -4,7 +4,7 @@ import os
 import streamlit as st
 from components.graph import build_graph
 
-st.title("🤖 Sharepoint Chatbot/RAG")
+st.title("🤖 SharePoint Chatbot/RAG")
 
 graph = build_graph()
 

@@ -1,3 +1,5 @@
+"""Document loader to load documents"""
+
 from langchain_community.document_loaders.sharepoint import SharePointLoader
 import warnings
 import streamlit as st

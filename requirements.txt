@@ -40,6 +40,7 @@ exceptiongroup==1.2.2
 executing==2.1.0
 fastapi==0.115.5
 filelock==3.16.1
+filetype==1.2.0
 fitz==0.0.1.dev2
 flatbuffers==24.3.25
 frontend==0.0.3
@@ -47,10 +48,16 @@ frozenlist==1.5.0
 fsspec==2024.10.0
 gitdb==4.0.11
 GitPython==3.1.43
+google-ai-generativelanguage==0.6.10
+google-api-core==2.23.0
+google-api-python-client==2.154.0
 google-auth==2.36.0
+google-auth-httplib2==0.2.0
+google-generativeai==0.8.3
 googleapis-common-protos==1.66.0
 greenlet==3.1.1
 grpcio==1.68.0
+grpcio-status==1.68.0
 h11==0.14.0
 httpcore==1.0.7
 httplib2==0.22.0
@@ -80,6 +87,7 @@ langchain==0.3.8
 langchain-chroma==0.1.4
 langchain-community==0.3.8
 langchain-core==0.3.21
+langchain-google-genai==2.0.6
 langchain-mongodb==0.2.0
 langchain-openai==0.2.10
 langchain-text-splitters==0.3.2
@@ -132,6 +140,7 @@ platformdirs==4.3.6
 posthog==3.7.3
 prompt_toolkit==3.0.48
 propcache==0.2.0
+proto-plus==1.25.0
 protobuf==5.28.3
 prov==2.0.1
 psutil==6.1.0
@@ -152,6 +161,7 @@ PyMuPDF==1.24.14
 pyparsing==3.2.0
 PyPika==0.48.9
 pyproject_hooks==1.2.0
+pysqlite3==0.5.4
 python-dateutil==2.9.0.post0
 python-dotenv==1.0.1
 pytils==0.4.1
@@ -178,7 +188,7 @@ soupsieve==2.6
 SQLAlchemy==2.0.35
 stack-data==0.6.3
 starlette==0.41.3
-streamlit
+streamlit==1.40.2
 sympy==1.13.3
 tenacity==9.0.0
 tiktoken==0.8.0
@@ -195,6 +205,7 @@ typing-inspect==0.9.0
 typing_extensions==4.12.2
 tzdata==2024.2
 tzlocal==5.2
+uritemplate==4.1.1
 urllib3==2.2.3
 uvicorn==0.32.1
 uvloop==0.21.0
@@ -205,4 +216,3 @@ websockets==14.1
 wrapt==1.17.0
 yarl==1.18.0
 zipp==3.21.0
-pysqlite3-binary

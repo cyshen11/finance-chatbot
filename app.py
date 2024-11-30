@@ -10,6 +10,9 @@ import streamlit as st
 model = st.sidebar.selectbox("Model", ["Google Gemini 1.5 Flash-8B", "OpenAI gpt-4o-mini"])
 os.environ["model"] = model
 
+# Initialize to avoid key error
+os.environ["OPENAI_API_KEY"] = ""
+
 # Get API keys
 os.environ["API_KEY_PROVIDED"] = "y"
 if model == "OpenAI gpt-4o-mini":

@@ -6,9 +6,15 @@ sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
 import os
 import streamlit as st
 
-# Widgets shared by all the pages
-openai_api_key = st.sidebar.text_input("OpenAI API Key", type="password")
-os.environ["OPENAI_API_KEY"] = openai_api_key
+# Dropdown for user to select model
+model = st.sidebar.selectbox("Model", ["Google Gemini 1.5 Flash-8B", "OpenAI gpt-4o-mini"])
+
+# Get API keys
+if model == "OpenAI gpt-4o-mini":
+  openai_api_key = st.sidebar.text_input("OpenAI API Key", type="password")
+  os.environ["OPENAI_API_KEY"] = openai_api_key
+else:
+  os.environ["GOOGLE_API_KEY"] = st.secrets["GOOGLE_API_KEY"]
 
 # Pages
 pg = st.navigation([

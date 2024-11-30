@@ -61,7 +61,7 @@ This chatbot, powered by Retrieval-Augmented Generation (RAG) technology, enable
 
 2. Answer Generation:
 
-   - Combine retrieved snippets with OpenAI's model(gpt-4o-mini) to generate a response.
+   - Combine retrieved snippets with LLM model to generate a response.
 
 3. Response Delivery:
    - Present results in the frontend.

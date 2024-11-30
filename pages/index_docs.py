@@ -7,10 +7,7 @@ import os
 st.title("📄 Index Sharepoint Documents")
 create_db = st.button("Index")
 
-if not os.environ["OPENAI_API_KEY"].startswith("sk-"):
-    st.warning("Please enter your OpenAI API key!", icon="⚠")
-
-if create_db:
+if create_db and os.environ["API_KEY_PROVIDED"] == "y":
     try:
         create_vector_store()
         st.success("✅ Index documents successfully!")

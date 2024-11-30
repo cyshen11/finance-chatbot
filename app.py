@@ -8,12 +8,17 @@ import streamlit as st
 
 # Dropdown for user to select model
 model = st.sidebar.selectbox("Model", ["Google Gemini 1.5 Flash-8B", "OpenAI gpt-4o-mini"])
-os.environ["MODEL"] = model
 
 # Get API keys
+os.environ["API_KEY_PROVIDED"] = True
 if model == "OpenAI gpt-4o-mini":
   openai_api_key = st.sidebar.text_input("OpenAI API Key", type="password")
   os.environ["OPENAI_API_KEY"] = openai_api_key
+
+  # Check if API key provided
+  if not openai_api_key.startswith("sk-"):
+      st.sidebar.warning("Please enter your OpenAI API key!", icon="⚠")
+      os.environ["API_KEY_PROVIDED"] = False
 else:
   os.environ["GOOGLE_API_KEY"] = st.secrets["GOOGLE_API_KEY"]
 

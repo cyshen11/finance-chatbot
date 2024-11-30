@@ -8,6 +8,7 @@ st.title("📄 Index Sharepoint Documents")
 create_db = st.button("Index")
 
 if create_db and os.environ["API_KEY_PROVIDED"] == "y":
+    create_vector_store()
     try:
         create_vector_store()
         st.success("✅ Index documents successfully!")

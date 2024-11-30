@@ -4,8 +4,12 @@ from components.utils import State
 from components.document_loader import load_documents
 from langchain_chroma import Chroma
 from langchain_openai import OpenAIEmbeddings
+from langchain_google_genai import GoogleGenerativeAIEmbeddings
 from uuid import uuid4
 import streamlit as st
+import os
+
+model = os.environ["model"]
 
 def initialize_vector_store():
   """Initialize vector store
@@ -13,14 +17,20 @@ def initialize_vector_store():
   Returns:
       vector_store (Chroma): ChromaDB object
   """
-  embeddings = OpenAIEmbeddings(model="text-embedding-3-large")
+
+  if model == "Google Gemini 1.5 Flash-8B":
+    collection_name = get_collection_name()
+    embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001")
+  elif model == "OpenAI gpt-4o-mini":
+    collection_name = get_collection_name()
+    embeddings = OpenAIEmbeddings(model="text-embedding-3-large")
 
   vector_store = Chroma(
-    collection_name="docs_embeddings",
+    collection_name=collection_name,
     embedding_function=embeddings,
-    persist_directory="data/chroma_langchain_db",  
+    persist_directory="./data/chroma_langchain_db",  
   )
-  
+
   return vector_store
 
 def add_items(vector_store, documents):
@@ -45,7 +55,7 @@ def retrieve(state: State):
   
   """
   vectorstore = initialize_vector_store()
-  retriever = vectorstore.as_retriever(search_kwargs={"k": 10})
+  retriever = vectorstore.as_retriever(search_kwargs={"k": 10}, collection_name=get_collection_name())
 
   return {"context": retriever.invoke(state["question"])}
 
@@ -61,6 +71,20 @@ def create_vector_store():
   add_items(vector_store, documents)
 
   return True
+
+def get_collection_name():
+  """Get collection name based on user selected model
+
+  Returns:
+      collection_name (str): Vector database collection name
+  
+  """
+  if model == "Google Gemini 1.5 Flash-8B":
+    collection_name = "docs_embeddings_google"
+  elif model == "OpenAI gpt-4o-mini":
+    collection_name = "docs_embeddings_openai"
+
+  return collection_name
 
   
 

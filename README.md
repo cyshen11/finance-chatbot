@@ -24,12 +24,16 @@ This chatbot, powered by Retrieval-Augmented Generation (RAG) technology, enable
   - Pretrained Models:
     - OpenAI's Embeddings API (text-embedding-3-large)
     - OpenAI's Model API (gpt-4o-mini)
+    - Google's Embeddings API (embedding-001)
+    - Google's Model API (gemini-1.5-flash-8b)
 - Cloud Services:
   - Storage: Microsoft SharePoint
   - Deployment: Streamlit Community Cloud
 
 ---
+
 ### <a href="https://finance-chatbot-vincent-cheng.streamlit.app/" target="_blank">Check SharePoint Chatbot/RAG Live</a>
+
 ---
 
 ### Workflow in the RAG Pipeline:

@@ -23,7 +23,19 @@ def generate(state:State):
 
   # Post-processing retrieved docs
   docs_content = "\n\n".join(doc.page_content for doc in state["context"])
-  docs_source = "\n\n".join( 'page:' + str(doc.metadata['page']) + '\nsource:' + doc.metadata['source'] for doc in state["context"])
+  
+  # Get only documents with unique source and page
+  unique_documents = []
+  seen = set()
+  for doc in state["context"]:
+    source = doc.metadata.get("source")
+    page = doc.metadata.get("page")
+    identifier = (source, page)
+    if identifier not in seen:
+        unique_documents.append(doc)
+        seen.add(identifier)
+
+  docs_source = "\n\n".join( 'page:' + str(doc.metadata['page']) + '\nsource:' + doc.metadata['source'] for doc in unique_documents)
 
   # Generate prompt
   messages = prompt.invoke({"question": state["question"], "context": docs_content})

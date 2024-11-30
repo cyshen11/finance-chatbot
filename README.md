@@ -29,6 +29,8 @@ This chatbot, powered by Retrieval-Augmented Generation (RAG) technology, enable
   - Deployment: Streamlit Community Cloud
 
 ---
+### <a href="https://finance-chatbot-vincent-cheng.streamlit.app/" target="_blank">Check SharePoint Chatbot/RAG Live</a>
+---
 
 ### Workflow in the RAG Pipeline:
 

@@ -19,13 +19,11 @@ st.markdown(
 with st.form("my_form"):
   question = st.text_area(
       "Enter text:",
-      "What is the NVIDIA 2025 Q1 Revenue?",
+      "What is the NVIDIA 2024 Q3 Revenue?",
   )
   submitted = st.form_submit_button("Submit")
-  if not openai_api_key.startswith("sk-"):
-      st.warning("Please enter your OpenAI API key!", icon="⚠")
   
-  if submitted and openai_api_key.startswith("sk-"):
+  if submitted and os.environ["API_KEY_PROVIDED"] == "y":
       response = graph.invoke({"question": question})
       st.markdown("### Answer")
       st.text(response["answer"])

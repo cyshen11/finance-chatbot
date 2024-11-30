@@ -23,7 +23,7 @@ with st.form("my_form"):
   )
   submitted = st.form_submit_button("Submit")
   
-  if submitted and os.environ["API_KEY_PROVIDED"] is True:
+  if submitted and os.environ["API_KEY_PROVIDED"] == "y":
       response = graph.invoke({"question": question})
       st.markdown("### Answer")
       st.text(response["answer"])

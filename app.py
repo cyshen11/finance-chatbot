@@ -8,6 +8,7 @@ import streamlit as st
 
 # Dropdown for user to select model
 model = st.sidebar.selectbox("Model", ["Google Gemini 1.5 Flash-8B", "OpenAI gpt-4o-mini"])
+os.environ["MODEL"] = model
 
 # Get API keys
 if model == "OpenAI gpt-4o-mini":

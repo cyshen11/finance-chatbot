@@ -2,7 +2,11 @@
 
 from langchain import hub
 from langchain_openai import ChatOpenAI
+from langchain_google_genai import ChatGoogleGenerativeAI
 from components.utils import State
+import os
+
+model = os.environ["model"]
 
 def generate(state:State):
   """Generate response based on retrieved docs
@@ -13,8 +17,11 @@ def generate(state:State):
   Returns:
       Response (Object): Response object contains answer and source
   """
+  if model == "Google Gemini 1.5 Flash-8B":
+    llm = ChatGoogleGenerativeAI(model="gemini-1.5-flash-8b")
+  elif model == "OpenAI gpt-4o-mini":
+    llm = ChatOpenAI(model="gpt-4o-mini")
 
-  llm = ChatOpenAI(model="gpt-4o-mini")
   prompt = hub.pull("rlm/rag-prompt")
   
   # Check if no retrieved docs, return no context

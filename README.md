@@ -11,6 +11,10 @@ This chatbot, powered by Retrieval-Augmented Generation (RAG) technology, enable
 
 ---
 
+### <a href="https://finance-chatbot-vincent-cheng.streamlit.app/" target="_blank">Check SharePoint Chatbot/RAG Live</a>
+
+---
+
 ### Tech Stack:
 
 - Frontend:
@@ -29,10 +33,6 @@ This chatbot, powered by Retrieval-Augmented Generation (RAG) technology, enable
 - Cloud Services:
   - Storage: Microsoft SharePoint
   - Deployment: Streamlit Community Cloud
-
----
-
-### <a href="https://finance-chatbot-vincent-cheng.streamlit.app/" target="_blank">Check SharePoint Chatbot/RAG Live</a>
 
 ---
 
@@ -65,3 +65,10 @@ This chatbot, powered by Retrieval-Augmented Generation (RAG) technology, enable
 
 3. Response Delivery:
    - Present results in the frontend.
+
+---
+
+Developed by Vincent Cheng  
+<a href="https://www.linkedin.com/in/yun-sheng-cheng-86094a143/" target="_blank">
+<img src="https://cdn-icons-png.flaticon.com/512/174/174857.png" alt="LinkedIn" style="height:30px; width:30px;filter: grayscale(100%);">
+</a>

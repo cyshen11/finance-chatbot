@@ -55,7 +55,7 @@ def retrieve(state: State):
   
   """
   vectorstore = initialize_vector_store()
-  retriever = vectorstore.as_retriever(search_kwargs={"k": 10}, collection_name=get_collection_name())
+  retriever = vectorstore.as_retriever(search_kwargs={"k": 50}, collection_name=get_collection_name())
 
   return {"context": retriever.invoke(state["question"])}
 

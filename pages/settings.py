@@ -21,11 +21,11 @@ if user_name == admin_acc["USERNAME"] and password == admin_acc["PASSWORD"]:
         except:
           st.error("❌ Database creation fail.")
     if test_db:
-    #   try:
-      query_result = test_database()
-      st.dataframe(query_result)
-        #   except:
-        #     st.error("❌ Database test fail.")
+      try:
+        query_result = test_database()
+        st.dataframe(query_result)
+      except:
+        st.error("❌ Database test fail.")
         
 else:
     st.error("❌ Invalid user name or password.")

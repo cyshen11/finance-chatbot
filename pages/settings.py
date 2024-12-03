@@ -15,17 +15,17 @@ if user_name == admin_acc["USERNAME"] and password == admin_acc["PASSWORD"]:
     create_db = st.button("Create Database")
     test_db = st.button("Test Database")
     if create_db:
-        # try:
-        create_database()
-        # st.success("✅ Database created successfully!")
-        
+        try:
+          create_database()
+          st.success("✅ Database created successfully!")
+        except:
+          st.error("❌ Database creation fail.")
     if test_db:
     #   try:
       query_result = test_database()
       st.dataframe(query_result)
         #   except:
         #     st.error("❌ Database test fail.")
-        # except:
-        #   st.error("❌ Database creation fail.")
+        
 else:
     st.error("❌ Invalid user name or password.")

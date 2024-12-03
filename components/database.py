@@ -1,6 +1,7 @@
 import pandas as pd
 from sqlalchemy import create_engine
 import yfinance as yf
+import sqlite3
 
 def create_database():
   # Set up the SQLite database engine
@@ -28,12 +29,14 @@ def create_database():
   data.to_sql('stock_data', engine, index=False, if_exists='replace')
 
 def test_database():
-  # Set up the SQLite database engine
-  engine = create_engine('sqlite:///data/sqlite_db.db')
+  # Open SQLite as read only
+  conn = sqlite3.connect('file:data/sqlite_db.db?mode=ro', uri=True)
 
   # Query the database
   query = 'SELECT * FROM stock_data LIMIT 10'
-  query_result = pd.read_sql(query, engine)
+  query_result = pd.read_sql(query, conn)
+
+  conn.close()
 
   # Return the query result
   return query_result

@@ -6,12 +6,14 @@ import os
 from typing import Dict, Any
 import time
 import streamlit as st
+import hashlib
 
 class StockDatabase:
     def __init__(self, db_name: str = "data/sqlite_db/stock_data.db"):
         self.db_name = db_name
         self.alpha_vantage_api_key = st.secrets['ALPHA_VANTAGE_API']
         self.initialize_database()
+        self.create_readonly_user()
 
     def initialize_database(self):
         """Create the database and required tables if they don't exist"""
@@ -323,8 +325,144 @@ class StockDatabase:
         result = cursor.fetchone()[0]
         conn.close()
         return result
+    
+    def create_readonly_user(self):
+        """Create a read-only user for the database"""
+        conn = sqlite3.connect(self.db_name)
+        cursor = conn.cursor()
 
-def main():
+        # Get credentials from environment variables
+        readonly_user = st.secrets["SQL_USER"]
+        readonly_username = readonly_user["USERNAME"]
+        readonly_password = readonly_user["PASSWORD"]
+
+        # Hash the password for security
+        password_hash = hashlib.sha256(readonly_password.encode()).hexdigest()
+
+        try:
+            # Create users table if it doesn't exist
+            cursor.execute('''
+                CREATE TABLE IF NOT EXISTS users (
+                    username TEXT PRIMARY KEY,
+                    password_hash TEXT NOT NULL,
+                    role TEXT NOT NULL,
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                )
+            ''')
+
+            # Create or update readonly user
+            cursor.execute('''
+                INSERT OR REPLACE INTO users (username, password_hash, role)
+                VALUES (?, ?, ?)
+            ''', (readonly_username, password_hash, 'readonly'))
+
+            # Create view permissions table
+            cursor.execute('''
+                CREATE TABLE IF NOT EXISTS view_permissions (
+                    username TEXT,
+                    table_name TEXT,
+                    permission TEXT,
+                    FOREIGN KEY (username) REFERENCES users(username),
+                    PRIMARY KEY (username, table_name)
+                )
+            ''')
+
+            # Grant read permissions for specific tables
+            tables = ['company_overview', 'daily_prices']
+            for table in tables:
+                cursor.execute('''
+                    INSERT OR REPLACE INTO view_permissions (username, table_name, permission)
+                    VALUES (?, ?, ?)
+                ''', (readonly_username, table, 'READ'))
+
+            conn.commit()
+            print(f"Read-only user '{readonly_username}' created successfully")
+
+        except sqlite3.Error as e:
+            print(f"Error creating read-only user: {e}")
+        finally:
+            conn.close()
+
+    def verify_readonly_user(self, username: str, password: str) -> bool:
+        """Verify readonly user credentials and permissions"""
+        conn = sqlite3.connect(self.db_name)
+        cursor = conn.cursor()
+
+        password_hash = hashlib.sha256(password.encode()).hexdigest()
+
+        try:
+            cursor.execute('''
+                SELECT role FROM users 
+                WHERE username = ? AND password_hash = ?
+            ''', (username, password_hash))
+            
+            result = cursor.fetchone()
+            return result is not None and result[0] == 'readonly'
+        finally:
+            conn.close()
+
+    def get_readonly_connection(self, username: str, password: str):
+        """Get a read-only connection to the database"""
+        if not self.verify_readonly_user(username, password):
+            raise ValueError("Invalid credentials or insufficient permissions")
+
+        class ReadOnlyConnection:
+            def __init__(self, db_path, username):
+                self.conn = sqlite3.connect(db_path)
+                self.username = username
+
+            def execute_query(self, query: str, params: tuple = None) -> pd.DataFrame:
+                """Execute read-only queries"""
+                # Basic SQL injection prevention
+                query = query.strip().lower()
+                if not query.startswith('select'):
+                    raise ValueError("Only SELECT queries are allowed")
+
+                cursor = self.conn.cursor()
+                
+                # Verify table permissions
+                tables = self._extract_tables_from_query(query)
+                for table in tables:
+                    if not self._has_read_permission(table):
+                        raise ValueError(f"No read permission for table: {table}")
+
+                if params:
+                    cursor.execute(query, params)
+                else:
+                    cursor.execute(query)
+                
+                columns = [description[0] for description in cursor.description]
+                rows = cursor.fetchall()
+                return pd.DataFrame(rows, columns=columns)
+
+            def _extract_tables_from_query(self, query: str) -> list:
+                """Extract table names from the query"""
+                # Basic implementation - could be improved with proper SQL parsing
+                from_split = query.split(' from ')
+                if len(from_split) < 2:
+                    return []
+                
+                tables_part = from_split[1].split(' where ')[0]
+                return [t.strip() for t in tables_part.split(',')]
+
+            def _has_read_permission(self, table: str) -> bool:
+                """Check if user has read permission for the table"""
+                cursor = self.conn.cursor()
+                cursor.execute('''
+                    SELECT permission FROM view_permissions 
+                    WHERE username = ? AND table_name = ?
+                ''', (self.username, table))
+                
+                result = cursor.fetchone()
+                return result is not None and result[0] == 'READ'
+
+            def close(self):
+                """Close the connection"""
+                self.conn.close()
+
+        return ReadOnlyConnection(self.db_name, username)
+
+def create_database():
     # Initialize the database
     db = StockDatabase()
     
@@ -358,12 +496,44 @@ def main():
         except Exception as e:
             print(f"Error processing {symbol}: {str(e)}")
 
-    # Example of retrieving and analyzing data
-    aapl_data = db.get_stock_data('AAPL')
-    
-    if not aapl_data.empty:
-        print("\nSample of AAPL data:")
-        print(aapl_data.head())
+def test_database(db):
+    # Example usage of read-only user
+    try:
+        # Get credentials from environment variables
+        readonly_user = st.secrets["SQL_USER"]
+        readonly_username = readonly_user["USERNAME"]
+        readonly_password = readonly_user["PASSWORD"]
 
-def create_database():
-    main()
+        # Get read-only connection
+        ro_conn = db.get_readonly_connection(readonly_username, readonly_password)
+
+        # Example queries
+        try:
+            # Get all stocks
+            stocks_df = ro_conn.execute_query('''
+                SELECT symbol, name, sector, industry 
+                FROM company_overview
+            ''')
+            print("\nCompany overview:")
+            print(stocks_df.head())
+
+            # Get specific stock data
+            aapl_data = ro_conn.execute_query('''
+                SELECT date, close, volume 
+                FROM daily_prices 
+                WHERE symbol = ? 
+                ORDER BY date DESC 
+                LIMIT 5
+            ''', ('AAPL',))
+            print("\nRecent AAPL data:")
+            print(aapl_data)
+
+        except ValueError as e:
+            print(f"Query error: {e}")
+        finally:
+            ro_conn.close()
+
+    except Exception as e:
+        print(f"Error: {e}")
+
+

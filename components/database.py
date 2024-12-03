@@ -365,5 +365,5 @@ def main():
         print("\nSample of AAPL data:")
         print(aapl_data.head())
 
-if __name__ == "__main__":
+def create_database():
     main()

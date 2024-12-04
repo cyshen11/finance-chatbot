@@ -4,16 +4,20 @@ import os
 import streamlit as st
 from components.graph import build_graph
 
-st.title("🤖 SharePoint Chatbot/RAG")
+st.title("⚡ SQL Chatbot/RAG")
 
 graph = build_graph()
 
 openai_api_key = os.environ["OPENAI_API_KEY"]
 
-url = st.secrets["SHAREPOINT_URL"]
 st.markdown(
-   "Please ask questions based on the documents in this [Sharepoint folder](%s)" % url,
-    unsafe_allow_html=False
+    """
+        This database consists of 4 tables.
+        - companies
+        - price_history
+        - balance_sheets
+        - income_statements
+    """
 )
 
 with st.form("my_form"):

@@ -4,7 +4,7 @@ from langchain_openai import ChatOpenAI
 from langchain_google_genai import ChatGoogleGenerativeAI
 from typing_extensions import Annotated
 from typing_extensions import TypedDict
-from utils import State
+from components.utils import State
 from langchain_community.utilities import SQLDatabase
 
 model = os.environ["model"]

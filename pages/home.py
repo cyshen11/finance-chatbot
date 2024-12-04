@@ -32,4 +32,4 @@ with st.form("my_form"):
     #   st.markdown("### Answer")
     #   st.text(response["answer"])
       st.markdown("### Query")
-      st.markdown(response["query"])
+      st.markdown(response['query'])

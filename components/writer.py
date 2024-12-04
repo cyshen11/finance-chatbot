@@ -6,6 +6,7 @@ from typing_extensions import Annotated
 from typing_extensions import TypedDict
 from components.utils import State
 from langchain_community.utilities import SQLDatabase
+import sqlite3
 
 model = os.environ["model"]
 
@@ -24,12 +25,12 @@ class QueryOutput(TypedDict):
 
     query: Annotated[str, ..., "Syntactically valid SQL query."]
 
-
 def write_query(state: State):
     """Generate SQL query to fetch information."""
     llm = init_llm()
     query_prompt_template = hub.pull("langchain-ai/sql-query-system-prompt")
-    db = SQLDatabase.from_uri("file:data/sqlite_db.db?mode=ro")
+    creator = lambda: sqlite3.connect('file:data/sqlite_db.db?mode=ro', uri=True)
+    db = SQLDatabase.from_uri('sqlite:///' , engine_args={'creator': creator})
 
     prompt = query_prompt_template.invoke(
         {
@@ -39,6 +40,7 @@ def write_query(state: State):
             "input": state["question"],
         }
     )
+
     structured_llm = llm.with_structured_output(QueryOutput)
     result = structured_llm.invoke(prompt)
     return {"query": result["query"]}

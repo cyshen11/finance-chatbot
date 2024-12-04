@@ -29,7 +29,7 @@ with st.form("my_form"):
   
   if submitted and os.environ["API_KEY_PROVIDED"] == "y":
       response = graph.invoke({"question": question})
-      st.markdown("### Answer")
-      st.text(response["answer"])
-      st.markdown("### Source")
-      st.markdown(response["source"])
+    #   st.markdown("### Answer")
+    #   st.text(response["answer"])
+      st.markdown("### Query")
+      st.markdown(response["query"])

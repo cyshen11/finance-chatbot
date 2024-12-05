@@ -1,8 +1,12 @@
 """Streamlit App"""
 
-__import__('pysqlite3')
-import sys
-sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
+try:
+  __import__('pysqlite3')
+  import sys
+  sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
+except:
+   pass
+
 import os
 import streamlit as st
 

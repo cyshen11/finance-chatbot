@@ -2,11 +2,9 @@
 
 import os
 import streamlit as st
-from components.graph import build_graph
+from components.graph import run_graph
 
 st.title("⚡ SQL Chatbot/RAG")
-
-graph = build_graph()
 
 openai_api_key = os.environ["OPENAI_API_KEY"]
 
@@ -28,8 +26,9 @@ with st.form("my_form"):
   submitted = st.form_submit_button("Submit")
   
   if submitted and os.environ["API_KEY_PROVIDED"] == "y":
-      response = graph.invoke({"question": question})
-    #   st.markdown("### Answer")
-    #   st.text(response["answer"])
-      st.markdown("### Query")
-      st.markdown(response['query'])
+    #   response = graph.invoke({"question": question})
+    # #   st.markdown("### Answer")
+    # #   st.text(response["answer"])
+    #   st.markdown("### Query")
+    #   st.markdown(response['query'])
+    st.write_stream(run_graph(question))

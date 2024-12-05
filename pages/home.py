@@ -23,7 +23,7 @@ st.markdown(
 with st.form("my_form"):
   question = st.text_area(
       "Enter text:",
-      "What is the NVIDIA 2024 Q3 Revenue?",
+      "What company data is available?",
   )
   submitted = st.form_submit_button("Submit")
   

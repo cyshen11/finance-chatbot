@@ -31,7 +31,6 @@ if model == "OpenAI gpt-4o-mini":
 # Pages
 pg = st.navigation([
   st.Page("pages/home.py", title="Home"), 
-  st.Page("pages/index_docs.py", title="Index Docs"), 
   st.Page("pages/settings.py", title="Settings"),
   st.Page("pages/about.py", title="About"),
   ]

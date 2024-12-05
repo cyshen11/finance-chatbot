@@ -8,10 +8,10 @@ class State(TypedDict):
     Attrs:
         question (str): User question
         query (str): Generated query
+        result (str): Query result
         answer (str): Generated answer
-        source (str): Document source link
     """
     question: str
     query: str
+    result: str
     answer: str
-    source: str

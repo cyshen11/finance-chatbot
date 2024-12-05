@@ -1,7 +1,6 @@
 import os
 from langchain import hub
 from langchain_openai import ChatOpenAI
-from langchain_google_genai import ChatGoogleGenerativeAI
 from typing_extensions import Annotated
 from typing_extensions import TypedDict
 from components.utils import State
@@ -12,11 +11,7 @@ model = os.environ["model"]
 
 def init_llm():
     """Initialize LLM"""
-
-    if model == "Google Gemini 1.5 Flash-8B":
-      llm = ChatGoogleGenerativeAI(model="gemini-1.5-flash-8b")
-    elif model == "OpenAI gpt-4o-mini":
-      llm = ChatOpenAI(model="gpt-4o-mini")
+    llm = ChatOpenAI(model="gpt-4o-mini")
 
     return llm
 

@@ -2,7 +2,7 @@
 
 import os
 import streamlit as st
-from components.graph import build_graph, graph_write_query, graph_generate_answer
+from components.graph import build_graph, run_graph
 from langchain_community.callbacks.streamlit import (
     StreamlitCallbackHandler,
 )
@@ -35,7 +35,7 @@ with st.form("my_form"):
   
   if submitted and os.environ["API_KEY_PROVIDED"] == "y":
     graph = build_graph()
-    st.write(graph_write_query(graph, question))
+    st.write(run_graph(graph, question, "write_query"))
 
     if st.button("Run Query"):
-      st.write(graph_generate_answer())
+      st.write(run_graph(graph, question, "generate_answer"))

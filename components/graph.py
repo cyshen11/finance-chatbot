@@ -17,3 +17,18 @@ def build_graph():
   graph = graph_builder.compile(checkpointer=memory, interrupt_before=["execute_query"])
 
   return graph
+
+def stream_graph(graph, question):
+  config = {"configurable": {"thread_id": "1"}}
+
+  for step in graph.stream(
+      {"question": question},
+      config,
+      stream_mode="updates",
+  ):
+      yield step
+
+
+def run_graph(question):
+  graph = build_graph()
+  stream_graph(question)

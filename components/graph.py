@@ -3,6 +3,7 @@
 from langgraph.graph import START, StateGraph
 from langgraph.checkpoint.memory import MemorySaver
 from components.writer import write_query
+from components.executor import execute_query
 from components.utils import State
 
 def build_graph():

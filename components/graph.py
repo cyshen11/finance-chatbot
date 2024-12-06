@@ -7,6 +7,7 @@ from components.executor import execute_query
 from components.generator import generate_answer
 from components.utils import State
 import streamlit as st
+import ast
 
 class ChatBot:
     def __init__(self):
@@ -31,6 +32,12 @@ class ChatBot:
 
         return graph
     
+    def build_graph_without_writing_query(self):
+        # Define the graph builder
+        graph_builder = StateGraph(State).add_sequence(
+            [execute_query, generate_answer]
+        )
+    
     def run_graph(self, question: str):
         """
         Run the graph with a question
@@ -45,7 +52,7 @@ class ChatBot:
                 query = step["write_query"]["query"]
                 st.session_state.sql_query = query
                 
-        content = f"Generated SQL query:\n`{query}`\n\n"
+        content = f"Generated SQL query:\n\n`{query}`\n\n"
         return content
         
     def continue_graph(self):
@@ -68,11 +75,14 @@ class ChatBot:
         response += f"Answer:\n{answer}\n\n"
         return response
     
+    def update_query(self, query: str):
+        self.graph.update_state(self.config, {"query": query}, as_node="write_query")
+    
     def string_tuples_to_markdown_table(self, data_string):
       # Convert string to list of tuples using eval
       # Remove the outer quotes first
       data_string = data_string.strip('"\'')
-      data = eval(data_string)
+      data = ast.literal_eval(data_string)
       
       # Define headers
       headers = self.get_headers_from_sql(st.session_state.sql_query)
@@ -84,7 +94,7 @@ class ChatBot:
       
       # Add data rows
       for row in data:
-          markdown += "| " + " | ".join(row) + " |\n"
+          markdown += "| " + " | ".join(str(item) for item in row) + " |\n"
           
       return markdown
     

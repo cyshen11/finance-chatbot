@@ -17,18 +17,20 @@ os.environ["LANGCHAIN_API_KEY"] = st.secrets["LANGSMITH"]["LANGCHAIN_API_KEY"]
 os.environ["LANGCHAIN_PROJECT"] = st.secrets["LANGSMITH"]["LANGCHAIN_PROJECT"]
 
 db_info = """
-        This database consists of 4 tables.
+        This SQLite database consists of 4 tables.
         - companies
         - price_history
         - balance_sheets
         - income_statements
     """ 
+st.sidebar.info(db_info)
+st.sidebar.button("Clear chat", on_click=lambda: st.session_state.chat_history.clear())
 
 # Initialize chatbot and states
 if 'chatbot' not in st.session_state:
     st.session_state.chatbot = ChatBot()
 if 'chat_history' not in st.session_state:
-    st.session_state.chat_history = [{"role": "assistant", "content": db_info}]
+    st.session_state.chat_history = []
 if 'verification_status' not in st.session_state:
     st.session_state.verification_status = "New"
 if 'sql_query' not in st.session_state:

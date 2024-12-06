@@ -3,9 +3,6 @@
 import os
 import streamlit as st
 from components.graph import ChatBot
-from langchain_community.callbacks.streamlit import (
-    StreamlitCallbackHandler,
-)
 
 st.title("⚡ SQL Chatbot/RAG")
 
@@ -30,7 +27,7 @@ st.sidebar.button("Clear chat", on_click=lambda: st.session_state.chat_history.c
 if 'chatbot' not in st.session_state:
     st.session_state.chatbot = ChatBot()
 if 'chat_history' not in st.session_state:
-    st.session_state.chat_history = []
+    st.session_state.chat_history = [{"role": "assistant", "content": "What can I help with?"}]
 if 'verification_status' not in st.session_state:
     st.session_state.verification_status = "New"
 if 'sql_query' not in st.session_state:

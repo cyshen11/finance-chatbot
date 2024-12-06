@@ -65,7 +65,7 @@ if prompt := st.chat_input("Ask a question about the database"):
     
     # User provided query
     elif st.session_state.verification_status == "Modify query" or st.session_state.verification_status == "Query invalid":
-        write_chat_message("user", prompt)
+        write_chat_message("user", "`" + prompt + "`")
         st.session_state.chatbot.update_query(prompt)
         
         try:

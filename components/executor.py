@@ -6,7 +6,7 @@ from langchain_community.utilities import SQLDatabase
 import sqlite3
 
 def execute_query(state: State):
-    """Initialize SharePoint document loaders
+    """Execute SQL query
 
     Args:
         state (State): Langgraph State

@@ -36,7 +36,7 @@ def write_query(state: State):
     prompt = query_prompt_template.invoke(
         {
             "dialect": db.dialect,
-            "top_k": 10,
+            "top_k": 1000,
             "table_info": db.get_table_info(),
             "input": state["question"],
         }

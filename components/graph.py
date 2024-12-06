@@ -87,7 +87,7 @@ class ChatBot:
       data = ast.literal_eval(data_string)
       
       # Define headers
-      headers = self.get_headers_from_sql(st.session_state.sql_query)
+      headers = self.extract_sql_headers(st.session_state.sql_query)
       
       # Create header row with alignment
       markdown = "| " + " | ".join(headers) + " |\n"
@@ -100,12 +100,55 @@ class ChatBot:
           
       return markdown
     
-    def get_headers_from_sql(self, sql_query):
-      # Get the part between SELECT and FROM
-      select_part = sql_query.split('FROM')[0].replace('SELECT', '').strip()
+    def extract_sql_headers(self, sql_query: str) -> list:
+      """
+      Extract column headers from a SQL SELECT query, handling aliases and functions.
       
-      # Split by comma and clean up each header
-      headers = [header.strip() for header in select_part.split(',')]
+      Args:
+          sql_query (str): The SQL query to parse
+          
+      Returns:
+          list: List of column headers
+      """
+      # Get the SELECT clause (everything between SELECT and FROM)
+      try:
+          select_clause = sql_query.upper().split('FROM')[0].replace('SELECT', '').strip()
+      except IndexError:
+          return []
+
+      # Split the columns by comma, but handle nested functions
+      headers = []
+      current_header = ''
+      paren_count = 0
       
-      return headers
-        
+      for char in select_clause:
+          if char == '(' and paren_count >= 0:
+              paren_count += 1
+              current_header += char
+          elif char == ')' and paren_count > 0:
+              paren_count -= 1
+              current_header += char
+          elif char == ',' and paren_count == 0:
+              headers.append(current_header.strip())
+              current_header = ''
+          else:
+              current_header += char
+      
+      # Add the last header
+      if current_header:
+          headers.append(current_header.strip())
+
+      # Process each header to handle aliases
+      processed_headers = []
+      for header in headers:
+          # Check for AS keyword
+          if ' AS ' in header.upper():
+              # Take the alias after AS
+              alias = header.split(' AS ')[-1].strip()
+              processed_headers.append(alias.strip('`" '))
+          else:
+              # If no AS, take the original column name
+              processed_headers.append(header.strip('`" '))
+
+      return processed_headers
+          

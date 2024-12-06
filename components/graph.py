@@ -1,6 +1,6 @@
 """RAG Graph"""
 
-from langgraph.graph import START, StateGraph, END
+from langgraph.graph import START, StateGraph
 from langgraph.checkpoint.memory import MemorySaver
 from components.writer import write_query
 from components.executor import execute_query
@@ -10,6 +10,20 @@ import streamlit as st
 import ast
 
 class ChatBot:
+    """ChatBot
+
+    Attrs:
+        graph (StateGraph): Langgraph graph 
+        config (dict): Langgraph config
+
+    Methods:
+        build_graph: Build the graph
+        run_graph: Run the graph with a question
+        continue_graph: Continue the graph
+        update_query: Update the query
+        string_tuples_to_markdown_table: Convert string to markdown table
+        get_headers_from_sql: Get headers from SQL query
+    """
     def __init__(self):
         self.graph = self.build_graph()
         self.config = {"configurable": {"thread_id": "1"}}
@@ -21,8 +35,6 @@ class ChatBot:
         graph_builder = StateGraph(State).add_sequence(
             [write_query, execute_query, generate_answer]
         )
-        
-        # Define the flow with human verification
         graph_builder.add_edge(START, "write_query")
         
         graph = graph_builder.compile(
@@ -32,22 +44,15 @@ class ChatBot:
 
         return graph
     
-    def build_graph_without_writing_query(self):
-        # Define the graph builder
-        graph_builder = StateGraph(State).add_sequence(
-            [execute_query, generate_answer]
-        )
-    
     def run_graph(self, question: str):
-        """
-        Run the graph with a question
-        """
         query = ""
+        # Run graph
         for step in self.graph.stream(
             {"question": question},
             self.config,
             stream_mode="updates",
         ):
+            # Get query
             if "write_query" in step:
                 query = step["write_query"]["query"]
                 st.session_state.sql_query = query
@@ -56,16 +61,13 @@ class ChatBot:
         return content
         
     def continue_graph(self):
-        """
-        Run the graph with a question
-        """
         response, result, answer = "", "", ""
         for step in self.graph.stream(
               None,
               self.config,
               stream_mode="updates",
           ):
-              # Store each step in the session state
+              # Get result and answer
               if "execute_query" in step:
                   result = step["execute_query"]["result"]
               if "generate_answer" in step:

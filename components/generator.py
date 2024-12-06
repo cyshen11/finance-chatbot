@@ -3,7 +3,14 @@ from langchain_openai import ChatOpenAI
 from components.utils import State
 
 def generate_answer(state: State):
-    """Answer question using retrieved information as context."""
+    """Answer question using retrieved result
+
+    Args:
+        state (State): Langgraph State
+
+    Returns:
+        answer: Generated answer based on the retrieved result
+    """
     llm = ChatOpenAI(model="gpt-4o-mini")
     prompt = (
         "Given the following user question, corresponding SQL query, "

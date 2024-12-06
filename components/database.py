@@ -1,9 +1,12 @@
+"""Database to initialize SQLite database"""
+
 import sqlite3
 import yfinance as yf
-from datetime import datetime
 import pandas as pd
 
 def create_tables():
+    """Create tables"""
+
     conn = sqlite3.connect('data/sqlite_db.db')
     cursor = conn.cursor()
 
@@ -65,6 +68,10 @@ def create_tables():
     conn.close()
 
 def insert_ticker_data(symbol):
+    """Insert ticker data to database
+    Args:
+        symbol (str): Ticker symbol (default is None)
+    """
     conn = sqlite3.connect('data/sqlite_db.db')
     cursor = conn.cursor()
     
@@ -138,14 +145,22 @@ def insert_ticker_data(symbol):
     conn.commit()
     conn.close()
 
-# Usage example
 def create_database():
+    """Create database"""
     create_tables()
     insert_ticker_data("AAPL")
     insert_ticker_data("NVDA")
     insert_ticker_data("GOOG")
 
 def test_database():
+    """Test database
+
+    Returns:
+        df_companies: Companies dataframe
+        df_price_history: Price history dataframe
+        df_balance_sheets: Balance sheets dataframe
+        df_income_statements: Income statements dataframe
+    """
     conn = sqlite3.connect('file:data/sqlite_db.db?mode=ro', uri=True)
     df_companies = pd.read_sql_query("SELECT * FROM companies LIMIT 5", conn)
     df_price_history = pd.read_sql_query("SELECT * FROM price_history LIMIT 5", conn)

@@ -15,11 +15,12 @@ if user_name == admin_acc["USERNAME"] and password == admin_acc["PASSWORD"]:
     create_db = st.button("Create Database")
     test_db = st.button("Test Database")
     if create_db:
-        # try:
+        # Check if dir exist
+        if not os.path.exists("data"):
+          os.makedirs("data")
+
         create_database()
         st.success("✅ Database created successfully!")
-        # except:
-        #   st.error("❌ Database creation fail.")
     if test_db:
       try:
         df_companies, df_price_history, df_balance_sheets, df_income_statements = test_database()

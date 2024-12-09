@@ -61,7 +61,7 @@ class ChatBot:
         return content
         
     def continue_graph(self):
-        response, result, answer = "", "", ""
+        query, response, result, answer = "", "", "", ""
         for step in self.graph.stream(
               None,
               self.config,
@@ -73,21 +73,23 @@ class ChatBot:
               if "generate_answer" in step:
                   answer = step["generate_answer"]["answer"]
 
-        response += f"Result:\n{self.string_tuples_to_markdown_table(result)}\n\n"
+        query = self.graph.get_state(self.config).values["query"]
+
+        response += f"Result:\n{self.string_tuples_to_markdown_table(query, result)}\n\n"
         response += f"Answer:\n{answer}\n\n"
         return response
     
     def update_query(self, query: str):
         self.graph.update_state(self.config, {"query": query}, as_node="write_query")
     
-    def string_tuples_to_markdown_table(self, data_string):
+    def string_tuples_to_markdown_table(self, query, data_string):
       # Convert string to list of tuples using eval
       # Remove the outer quotes first
       data_string = data_string.strip('"\'')
       data = ast.literal_eval(data_string)
       
       # Define headers
-      headers = self.extract_sql_headers(st.session_state.sql_query)
+      headers = self.extract_sql_headers(query)
       
       # Create header row with alignment
       markdown = "| " + " | ".join(headers) + " |\n"

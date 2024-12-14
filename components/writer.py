@@ -1,6 +1,7 @@
 """Writer to generate SQL query"""
 
 import os
+import unicodedata
 from langchain import hub
 from langchain_openai import ChatOpenAI
 from typing_extensions import Annotated
@@ -41,7 +42,7 @@ def write_query(state: State):
             "input": state["question"],
         }
     )
-
+    
     structured_llm = llm.with_structured_output(QueryOutput)
     result = structured_llm.invoke(prompt)
     return {"query": result["query"]}

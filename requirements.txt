@@ -216,4 +216,3 @@ wrapt==1.17.0
 yarl==1.18.0
 zipp==3.21.0
 pysqlite3-binary
-yfinance

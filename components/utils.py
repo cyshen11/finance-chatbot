@@ -1,17 +1,18 @@
 """Utilities that define the RAG State class"""
 
-from typing_extensions import TypedDict
+from typing_extensions import List, TypedDict
+from langchain_core.documents import Document
 
 class State(TypedDict):
     """RAG State
 
     Attrs:
         question (str): User question
-        query (str): Generated query
-        result (str): Query result
+        context (list(Document)): Retrieved list of documents from ChromaDB
         answer (str): Generated answer
+        source (str): Document source link
     """
     question: str
-    query: str
-    result: str
+    context: List[Document]
     answer: str
+    source: str

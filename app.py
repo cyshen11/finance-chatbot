@@ -1,13 +1,17 @@
 """Streamlit App"""
 
-__import__('pysqlite3')
-import sys
-sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
+try:
+  __import__('pysqlite3')
+  import sys
+  sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
+except:
+   pass
+
 import os
 import streamlit as st
 
 # Dropdown for user to select model
-model = st.sidebar.selectbox("Model", ["Google Gemini 1.5 Flash-8B", "OpenAI gpt-4o-mini"])
+model = st.sidebar.selectbox("Model", ["OpenAI gpt-4o-mini"])
 os.environ["model"] = model
 
 # Initialize to avoid key error
@@ -23,13 +27,12 @@ if model == "OpenAI gpt-4o-mini":
   if not openai_api_key.startswith("sk-"):
       st.sidebar.warning("Please enter your OpenAI API key!", icon="⚠")
       os.environ["API_KEY_PROVIDED"] = "n"
-else:
-  os.environ["GOOGLE_API_KEY"] = st.secrets["GOOGLE_API_KEY"]
 
 # Pages
 pg = st.navigation([
   st.Page("pages/home.py", title="Home"), 
-  st.Page("pages/index_docs.py", title="Index Docs"), 
-  st.Page("pages/about.py", title="About")]
+  st.Page("pages/settings.py", title="Settings"),
+  st.Page("pages/about.py", title="About"),
+  ]
 )
 pg.run()

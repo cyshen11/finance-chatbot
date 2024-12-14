@@ -23,21 +23,35 @@ def write_chat_message(role, prompt):
     st.session_state.chat_history.append({"role": role, "content": prompt})
 
 # Add database info and clear chat button to the sidebar
-db_info = """
-        This SQLite database consists of 4 tables.
-        - companies
-        - price_history
-        - balance_sheets
-        - income_statements
-        """ 
-st.sidebar.info(db_info)
+# db_info = """
+#         This SQLite database consists of Nvidia, Alphabet and Apple past 5 yearsstock data. 
+#         It consists of
+#         - companies info (sector, industry)
+#         - price_history (open, high, low, close, volume, dividends, stock_splits)
+#         - balance_sheets (inventory)
+#         - income_statements (ebit, ebitda)
+#         """ 
+# st.sidebar.info(db_info)
 st.sidebar.button("Clear chat", on_click=lambda: st.session_state.chat_history.clear())
 
 # Initialize chatbot and states
 if 'chatbot' not in st.session_state:
     st.session_state.chatbot = ChatBot()
 if 'chat_history' not in st.session_state:
-    st.session_state.chat_history = [{"role": "assistant", "content": "What can I help with?"}]
+    startup_msg = """
+    👋 Welcome! I'm your SQL Assistant for stock market data analysis.  
+    
+    I can help you query information about NVIDIA (NVDA), Apple (AAPL), and Alphabet (GOOG) stocks from the past 5 years.
+
+    You can ask me questions like:
+    - "Show me NVIDIA's highest stock price in 2023"  
+    - "Compare the average trading volume of Apple and Google in the last quarter of 2022"  
+    - "What was Apple's EBITDA in the most recent quarter?"  
+    - "List all companies and their sectors"
+
+    Feel free to ask your question, and I'll help you create and execute the appropriate SQL query! 
+    """
+    st.session_state.chat_history = [{"role": "assistant", "content": startup_msg}]
 if 'verification_status' not in st.session_state:
     st.session_state.verification_status = "New"
 if 'sql_query' not in st.session_state:

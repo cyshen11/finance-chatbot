@@ -188,7 +188,3 @@ data/chroma_openai_db/5996b819-594b-4d7a-a1a0-2f3dda9c94e8/data_level0.bin
 data/chroma_openai_db/5996b819-594b-4d7a-a1a0-2f3dda9c94e8/header.bin
 data/chroma_openai_db/5996b819-594b-4d7a-a1a0-2f3dda9c94e8/length.bin
 data/chroma_openai_db/5996b819-594b-4d7a-a1a0-2f3dda9c94e8/link_lists.bin
-data/sqlite_db.db
-pages/test.py
-test.py
-finance_data.db

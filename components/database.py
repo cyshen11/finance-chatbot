@@ -89,7 +89,7 @@ def insert_ticker_data(symbol):
 
     # Insert historical data
     try:
-        history = ticker.history(period="5y")
+        history = ticker.history(period="5 years")
         for date, row in history.iterrows():
             cursor.execute('''
             INSERT OR REPLACE INTO price_history 

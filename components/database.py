@@ -173,4 +173,5 @@ def test_database():
 def check_db_exist():
     """Check database exist. If not, create one."""
     if not os.path.exists('data/sqlite_db.db'):
+        os.mkdir('data')
         create_database()

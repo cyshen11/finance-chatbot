@@ -3,15 +3,18 @@
 import os
 import streamlit as st
 from components.graph import ChatBot
+from components.database import check_db_exist
 
 st.title("⚡ SQL Chatbot/RAG")
 
+check_db_exist()
+
 # Set environment variables
 openai_api_key = os.environ["OPENAI_API_KEY"]
-os.environ["LANGCHAIN_TRACING_V2"] = "true"
-os.environ["LANGCHAIN_ENDPOINT"] = st.secrets["LANGSMITH"]["LANGCHAIN_ENDPOINT"]
-os.environ["LANGCHAIN_API_KEY"] = st.secrets["LANGSMITH"]["LANGCHAIN_API_KEY"]
-os.environ["LANGCHAIN_PROJECT"] = st.secrets["LANGSMITH"]["LANGCHAIN_PROJECT"]
+# os.environ["LANGCHAIN_TRACING_V2"] = "true"
+# os.environ["LANGCHAIN_ENDPOINT"] = st.secrets["LANGSMITH"]["LANGCHAIN_ENDPOINT"]
+# os.environ["LANGCHAIN_API_KEY"] = st.secrets["LANGSMITH"]["LANGCHAIN_API_KEY"]
+# os.environ["LANGCHAIN_PROJECT"] = st.secrets["LANGSMITH"]["LANGCHAIN_PROJECT"]
 
 # Functions
 def update_session_state(status):
@@ -43,11 +46,11 @@ if 'chat_history' not in st.session_state:
     
     I can help you query information about NVIDIA (NVDA), Apple (AAPL), and Alphabet (GOOG) stocks from the past 5 years.
 
-    You can ask me questions like:
-    - "Show me NVIDIA's highest stock price in 2023"  
-    - "Compare the average trading volume of Apple and Google in the last quarter of 2022"  
-    - "What was Apple's EBITDA in the most recent quarter?"  
-    - "List all companies and their sectors"
+    You can ask me questions like:  
+    - *Show me NVIDIA's highest stock price in 2023*  
+    - *Compare the average trading volume of Apple and Google in the last quarter of 2022*  
+    - *What was Apple's EBITDA in the most recent quarter?*  
+    - *List all companies and their sectors*
 
     Feel free to ask your question, and I'll help you create and execute the appropriate SQL query! 
     """

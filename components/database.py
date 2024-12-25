@@ -3,6 +3,7 @@
 import sqlite3
 import yfinance as yf
 import pandas as pd
+import os
 
 def create_tables():
     """Create tables"""
@@ -89,7 +90,7 @@ def insert_ticker_data(symbol):
 
     # Insert historical data
     try:
-        history = ticker.history(period="5 years")
+        history = ticker.history(period="5y")
         for date, row in history.iterrows():
             cursor.execute('''
             INSERT OR REPLACE INTO price_history 
@@ -169,3 +170,7 @@ def test_database():
     conn.close()
     return df_companies, df_price_history, df_balance_sheets, df_income_statements
 
+def check_db_exist():
+    """Check database exist. If not, create one."""
+    if not os.path.exists('data/sqlite_db.db'):
+        create_database()

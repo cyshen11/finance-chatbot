@@ -3,8 +3,11 @@
 import os
 import streamlit as st
 from components.graph import ChatBot
+from components.database import check_db_exist
 
 st.title("⚡ SQL Chatbot/RAG")
+
+check_db_exist()
 
 # Set environment variables
 openai_api_key = os.environ["OPENAI_API_KEY"]

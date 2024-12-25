@@ -3,10 +3,12 @@
 import os
 import streamlit as st
 from components.graph import build_graph
+from components.vector_store import check_vector_store_exist
 
 st.title("🤖 SharePoint Chatbot/RAG")
 
 graph = build_graph()
+check_vector_store_exist()
 
 openai_api_key = os.environ["OPENAI_API_KEY"]
 

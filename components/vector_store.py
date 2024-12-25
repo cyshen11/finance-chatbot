@@ -86,6 +86,12 @@ def get_collection_name():
 
   return collection_name
 
+def check_vector_store_exist():
+  """Check if vector store exist. If not, create one."""
+  # Check if dir exist
+  if not os.path.exists("./data/"):
+    create_vector_store()
+
   
 
   

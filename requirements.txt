@@ -41,7 +41,6 @@ executing==2.1.0
 fastapi==0.115.5
 filelock==3.16.1
 filetype==1.2.0
-fitz==0.0.1.dev2
 flatbuffers==24.3.25
 frontend==0.0.3
 frozenlist==1.5.0

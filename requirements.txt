@@ -74,7 +74,7 @@ ipython==8.29.0
 isodate==0.6.1
 itsdangerous==2.2.0
 jedi==0.19.2
-Jinja2==3.1.4
+Jinja2==3.1.5
 jiter==0.8.0
 jsonpatch==1.33
 jsonpointer==3.0.0
